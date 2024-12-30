@@ -93,6 +93,7 @@ def decoder2(inputs, skip_1, skip_2):
 
     return x
 
+
 def output_block(inputs):
     x = Conv2D(1, (1, 1), padding="same")(inputs)
     x = Activation('sigmoid')(x)
@@ -138,7 +139,7 @@ def ASPP(x, filter):
     return y
 
 def build_model(shape):
-    print("building model...")
+    print("building model2...")
     inputs = Input(shape)
     x, skip_1 = encoder1(inputs)
     x = ASPP(x, 64)
@@ -151,7 +152,16 @@ def build_model(shape):
     x = ASPP(x, 64)
     x = decoder2(x, skip_1, skip_2)
     outputs2 = output_block(x)
-    outputs = Concatenate()([outputs1, outputs2])
+
+    y = inputs * outputs2
+
+    y, skip_3 = encoder2(y)
+    y = ASPP(y, 64)
+    y = decoder2(y, skip_1, skip_3)
+    outputs3 = output_block(y)
+    
+    
+    outputs = Concatenate()([outputs1, outputs3])
 
     model = Model(inputs, outputs)
     return model
