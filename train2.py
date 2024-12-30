@@ -43,7 +43,7 @@ def parse_data(x, y):
 def tf_dataset(x, y, batch=8):
     dataset = tf.data.Dataset.from_tensor_slices((x, y))
     dataset = dataset.shuffle(buffer_size=32)
-    dataset = dataset.map(map_func=parse_data)
+    dataset = dataset.map(map_func=parse_data, num_parallel_calls=batch)
     dataset = dataset.repeat()
     dataset = dataset.batch(batch)
     return dataset
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     valid_x = sorted(glob(os.path.join(valid_path, "ISIC2018_Task1-2_Validation_Input_", "*.jpg")))
     valid_y = sorted(glob(os.path.join(valid_path, "ISIC2018_Task1_Validation_GroundTruth_", "*.png")))
 
-    model_path = "models/ISIC2018_my_model.h5"
+    model_path = "files/ISIC2018_my_model.h5"
     batch_size = 16
     epochs = 300
     lr = 1e-4
