@@ -77,17 +77,23 @@ if __name__ == "__main__":
     tf.random.set_seed(42)
     create_dir("results/")
 
-    batch_size = 8
+    batch_size = 16
 
-    test_path = "../1/new_data/test/"
-    test_x = sorted(glob(os.path.join(test_path, "image", "*.jpg")))
-    test_y = sorted(glob(os.path.join(test_path, "mask", "*.jpg")))
+    test_path = "./data/"
+    test_x = sorted(glob(os.path.join(test_path, "ISIC2018_Task1-2_Test_Input_", "*.jpg")))
+    test_y = sorted(glob(os.path.join(test_path, "ISIC2018_Task1_Test_GroundTruth_", "*.png")))
+    
+    # for (x,y) in zip(test_x, test_y):
+    #     print(f"{x} {y")
+    
+    # exit()
+    
     test_dataset = tf_dataset(test_x, test_y, batch=batch_size)
 
     test_steps = (len(test_x)//batch_size)
     if len(test_x) % batch_size != 0:
         test_steps += 1
 
-    model = load_model_weight("files/model.h5")
+    model = load_model_weight("./data/DoubleUNet/files/model.h5")
     model.evaluate(test_dataset, steps=test_steps)
     evaluate_normal(model, test_x, test_y)

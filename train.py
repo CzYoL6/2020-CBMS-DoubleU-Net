@@ -53,21 +53,21 @@ if __name__ == "__main__":
     tf.random.set_seed(42)
     create_dir("files")
 
-    train_path = "../1/new_data/train/"
-    valid_path = "../1/new_data/valid/"
+    train_path = "./data/"
+    valid_path = "./data/"
 
     ## Training
-    train_x = sorted(glob(os.path.join(train_path, "image", "*.jpg")))
-    train_y = sorted(glob(os.path.join(train_path, "mask", "*.jpg")))
+    train_x = sorted(glob(os.path.join(train_path, "ISIC2018_Task1-2_Training_Input_", "*.jpg")))
+    train_y = sorted(glob(os.path.join(train_path, "ISIC2018_Task1_Training_GroundTruth_", "*.png")))
 
     ## Shuffling
     train_x, train_y = shuffling(train_x, train_y)
 
     ## Validation
-    valid_x = sorted(glob(os.path.join(valid_path, "image", "*.jpg")))
-    valid_y = sorted(glob(os.path.join(valid_path, "mask", "*.jpg")))
+    valid_x = sorted(glob(os.path.join(valid_path, "ISIC2018_Task1-2_Validation_Input_", "*.jpg")))
+    valid_y = sorted(glob(os.path.join(valid_path, "ISIC2018_Task1_Validation_GroundTruth_", "*.png")))
 
-    model_path = "files/model.h5"
+    model_path = "models/ISIC2018_my_model.h5"
     batch_size = 16
     epochs = 300
     lr = 1e-4

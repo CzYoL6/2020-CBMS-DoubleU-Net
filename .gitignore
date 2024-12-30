@@ -1,0 +1,8 @@
+
+%USERPROFILE%/pip/pip.ini
+/__pycache__
+/data
+/doubleunet
+DoubleUNet.pdf
+/results
+/logs
