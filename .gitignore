@@ -8,3 +8,5 @@ DoubleUNet.pdf
 /logs
 files/data.csv
 /wsl_venv
+/results_mymodel
+/results_original_model

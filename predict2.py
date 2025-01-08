@@ -61,7 +61,7 @@ def evaluate_normal(model, x_data, y_data):
         ]
         mask = np.concatenate(all_images, axis=1)
 
-        cv2.imwrite(f"results_original_model/{i}.png", mask)
+        cv2.imwrite(f"results_mymodel/{i}.png", mask)
 
 smooth = 1.
 def dice_coef(y_true, y_pred):
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     
     np.random.seed(42)
     tf.random.set_seed(42)
-    create_dir("results_original_model/")
+    create_dir("results_mymodel/")
 
     batch_size = 16
 
@@ -107,6 +107,6 @@ if __name__ == "__main__":
     if len(test_x) % batch_size != 0:
         test_steps += 1
 
-    model = load_model_weight("./files/ISIC2018_original_DoubleUNet_model.keras")
+    model = load_model_weight("./files/ISIC2018_my_model.keras")
     model.evaluate(test_dataset, steps=test_steps)
     evaluate_normal(model, test_x, test_y)
