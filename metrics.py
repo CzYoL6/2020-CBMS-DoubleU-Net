@@ -15,14 +15,24 @@ def dice_coef(y_true, y_pred):
 def dice_loss(y_true, y_pred):
     return 1.0 - dice_coef(y_true, y_pred)
 
+# def iou(y_true, y_pred):
+#     def f(y_true, y_pred):
+#         intersection = (y_true * y_pred).sum()
+#         union = y_true.sum() + y_pred.sum() - intersection
+#         x = (intersection + smooth) / (union + smooth)
+#         x = x.astype(np.float32)
+#         return x
+#     return tf.numpy_function(f, [y_true, y_pred], tf.float32)
+
 def iou(y_true, y_pred):
-    def f(y_true, y_pred):
-        intersection = (y_true * y_pred).sum()
-        union = y_true.sum() + y_pred.sum() - intersection
-        x = (intersection + smooth) / (union + smooth)
-        x = x.astype(np.float32)
-        return x
-    return tf.numpy_function(f, [y_true, y_pred], tf.float32)
+    y_true = tf.cast(y_true, tf.float32)
+    y_pred = tf.cast(y_pred, tf.float32)
+    
+    intersection = tf.reduce_sum(y_true * y_pred)
+    union = tf.reduce_sum(y_true) + tf.reduce_sum(y_pred) - intersection
+    iou = (intersection + smooth) / (union + smooth)
+    return iou
+
 
 def bce_dice_loss(y_true, y_pred):
     return binary_crossentropy(y_true, y_pred) + dice_loss(y_true, y_pred)

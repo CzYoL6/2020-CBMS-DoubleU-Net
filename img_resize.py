@@ -113,5 +113,5 @@ def resize_images(folder_path, size=(256, 256)):
                 print(f"Resized: {filename}")
 
 # Example usage
-resize_images('./data/ISIC2018_Task1_Validation_GroundTruth_', size=(512, 384))
-resize_images('./data/ISIC2018_Task1-2_Validation_Input_', size=(512, 384))
+resize_images('./data/ISIC2018_Task1_Training_GroundTruth_', size=(256, 192))
+resize_images('./data/ISIC2018_Task1-2_Training_Input_', size=(256, 192))

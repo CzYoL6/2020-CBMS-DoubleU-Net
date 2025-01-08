@@ -162,6 +162,7 @@ def build_model(shape):
     
     
     outputs = Concatenate()([outputs1, outputs3])
+    # outputs = Concatenate()([outputs1, outputs2])
 
     model = Model(inputs, outputs)
     return model

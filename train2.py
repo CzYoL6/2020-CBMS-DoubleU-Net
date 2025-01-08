@@ -11,6 +11,7 @@ from sklearn.model_selection import train_test_split
 import model2
 from utils import *
 from metrics import *
+from tensorflow import keras
 
 def read_image(x):
     x = x.decode()
@@ -36,8 +37,8 @@ def parse_data(x, y):
         return x, y
 
     x, y = tf.numpy_function(_parse, [x, y], [tf.float32, tf.float32])
-    x.set_shape([384, 512, 3])
-    y.set_shape([384, 512, 2])
+    x.set_shape([192, 256, 3])
+    y.set_shape([192, 256, 2])
     return x, y
 
 def tf_dataset(x, y, batch=8):
@@ -49,6 +50,18 @@ def tf_dataset(x, y, batch=8):
     return dataset
 
 if __name__ == "__main__":
+    # Set memory growth for all GPUs
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+        try:
+            for gpu in gpus:
+                tf.config.experimental.set_memory_growth(gpu, True)
+            print("Memory growth enabled for all GPUs")
+        except RuntimeError as e:
+            print(e)
+   
+    keras.config.disable_traceback_filtering()
+    
     np.random.seed(42)
     tf.random.set_seed(42)
     create_dir("files")
@@ -67,11 +80,11 @@ if __name__ == "__main__":
     valid_x = sorted(glob(os.path.join(valid_path, "ISIC2018_Task1-2_Validation_Input_", "*.jpg")))
     valid_y = sorted(glob(os.path.join(valid_path, "ISIC2018_Task1_Validation_GroundTruth_", "*.png")))
 
-    model_path = "files/ISIC2018_my_model.h5"
+    model_path = "files/ISIC2018_my_model.keras"
     batch_size = 16
     epochs = 300
     lr = 1e-4
-    shape = (384, 512, 3)
+    shape = (192, 256, 3)
 
     model = model2.build_model(shape)
     metrics = [
@@ -89,7 +102,7 @@ if __name__ == "__main__":
     callbacks = [
         ModelCheckpoint(model_path),
         ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=20),
-        CSVLogger("files/data.csv"),
+        CSVLogger("files/data_my_model.csv"),
         TensorBoard(),
         EarlyStopping(monitor='val_loss', patience=50, restore_best_weights=False)
     ]
@@ -110,3 +123,4 @@ if __name__ == "__main__":
             validation_steps=valid_steps,
             callbacks=callbacks,
             shuffle=False)
+ 

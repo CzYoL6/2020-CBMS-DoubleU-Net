@@ -56,19 +56,6 @@ def decoder1(inputs, skip_connections):
 
     return x
 
-# def encoder2(inputs):
-#     skip_connections = []
-#
-#     output = DenseNet121(include_top=False, weights='imagenet')(inputs)
-#     model = tf.keras.models.Model(inputs, output)
-#
-#     names = ["input_2", "conv1/relu", "pool2_conv", "pool3_conv"]
-#     for name in names:
-#         skip_connections.append(model.get_layer(name).output)
-#     output = model.get_layer("pool4_conv").output
-#
-#     return output, skip_connections
-
 def encoder2(inputs):
     num_filters = [32, 64, 128, 256]
     skip_connections = []
@@ -96,6 +83,7 @@ def decoder2(inputs, skip_1, skip_2):
 def output_block(inputs):
     x = Conv2D(1, (1, 1), padding="same")(inputs)
     x = Activation('sigmoid')(x)
+    # x = Activation('relu')(x)
     return x
 
 def Upsample(tensor, size):
